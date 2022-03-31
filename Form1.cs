@@ -8,7 +8,8 @@ public partial class Form1 : Form
     private bool tune常に前面に表示する = false;
     public Form1()
     {
-        InitializeComponent();
+        InitializeComponent(); 
+        this.TransparencyKey = Color.WhiteSmoke;
     }
 
     private void checkBox1_CheckedChanged(object sender, EventArgs e)

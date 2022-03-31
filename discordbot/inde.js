@@ -17,7 +17,7 @@ app.post("/get", (req, res) => {
 
   const a = req.body['content'].split('|')
 
-  getmes(a[1], a[0]).then((aa) => {
+  getmes(a[0], a[1]).then((aa) => {
     if (aa == "error") {
       return res.send("error")
     }
@@ -29,11 +29,12 @@ app.post("/get", (req, res) => {
           "author": message.author.id,
           "name": message.author.username,
           "time": message.createdTimestamp,
-          "avatar": message.author.displayAvatarURL({ format: "png", size: "1024" })
+          "avatar": message.author.displayAvatarURL({ format: "png", size: 1024 })
         }
       )
     })
-    return res.send({ "data": messages })
+    console.log(webhookurl(a[0],a[1]))
+    return res.send({ "data": messages ,"webhook":webhookurl(a[1])})
   }
 
   )
@@ -84,26 +85,22 @@ function getmes(channelid, guildid) {
     return channel.messages.fetch({ limit: 10 })
   }
   catch (e) {
+    console.log(e)
     return "error"
   }
 
 }
 
-function test(channelid, guildid) {
-  getmes(channelid, guildid).then((a) => {
-    let messages = [];
-    a.forEach(message => {
-      messages.push(
-        {
-          "content": message.content,
-          "author": message.author.id,
-          "name": message.author.username,
-          "time": message.createdTimestamp
-        }
-      )
-    })
-    return messages
-  }
-  )
-
+function webhookurl (channelid,guildid){
+  const guild = client.guilds.cache.get(guildid)
+  const channel = guild.channels.cache.get(channelid)
+  let url="";
+  channel.fetchWebhooks.then(webhooks=>{
+    if(webhooks.size==0){
+      return channel.createWebhook().url
+    }
+    else{
+     return webhooks[0].url
+    }
+  })
 }

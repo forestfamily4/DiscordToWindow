@@ -23,6 +23,7 @@
 [Rr]elease/
 [Rr]eleases/
 discordbot/node_modules/
+discordbot/.env
 x64/
 x86/
 bld/
